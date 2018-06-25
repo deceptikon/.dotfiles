@@ -1,0 +1,9 @@
+[options]
+# font = DroidSansMono Nerd Font Mono 11px
+# font = Ubuntu Mono derivative Powerline 13px 
+font = xos4 Terminus 12px
+cursor_shape = ibeam 
+
+[colors]
+background = rgba(0, 0, 0, 0.8)
+
