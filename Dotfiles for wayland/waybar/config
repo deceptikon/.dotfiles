@@ -1,0 +1,257 @@
+[
+{
+    "layer": "top",
+    "position": "top",
+    "height": 25,
+    "modules-left": ["battery", "network", "custom/vpn", "bluetooth", "temperature", "cpu", "memory"],
+    "modules-center": ["sway/window", "custom/waybar-media"],
+    "modules-right": ["sway/mode", "pulseaudio", "backlight", "clock"],
+    "sway/mode": {
+        "format": " {}",
+        "max-length": 50
+    },
+
+    "sway/window": {
+        "format": "{}",
+        "max-length": 80,
+        "rewrite": {
+           "(.*) - Firefox Developer Edition": "🌎 $1",
+           "(.*) - vim": " $1",
+           "(.*) - zsh": " [$1]",
+           "^zsh$": ""
+        }
+    },
+    "custom/waybar-media": {
+        "return-type": "json",
+        "exec": "waybar-media.py status",
+        "on-click": "waybar-media.py playpause",
+        "on-scroll-up": "waybar-media.py previous",
+        "on-scroll-down": "waybar-media.py next",
+        "escape": true
+    },
+    "tray": {
+      "icon-size": 12,
+      "spacing": 5,
+    },
+    "clock": {
+        "format": "{:%d %b   %H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+    "custom/japan": {
+        "format": "{}",
+        "exec": "TZ=Asia/Tokyo date \"+%H:%M %Z\"",
+        "interval": 30,
+    },
+    "cpu": {
+        "format": " {usage}%"
+    },
+    "memory": {
+        "format": " {}%"
+    },
+    "temperature": {
+        "critical-threshold": 75,
+        "format": " {temperatureC}°C"
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
+        "on-scroll-up": "exec brightnessctl set 10%+",
+        "on-scroll-down": "exec brightnessctl set 10%-",
+        "on-click":"exec brightnessctl set 100%",
+        "on-click-right":"exec brightnessctl set 20",
+        "format-icons": ["", "", "", "", ""],
+        "smooth-scrolling-threshold": 1.5
+    },
+    "bluetooth": {
+        "format": "{icon}",
+        "format-icons": {
+          "enabled": " ",
+          "disabled": " "
+        },
+        "tooltip-format": "{}",
+        "on-click": "blueman-manager"
+    },
+    "battery": {
+        "bat": "BAT0",
+        "full-at": 95,
+        "states": {
+            "good": 70,
+            "warning": 15,
+            "critical": 5
+        },
+        "format": "{icon} {capacity}%",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "network": {
+        "format-wifi": " {essid} ({signalStrength}%)",
+        "format": "  {ifname}",
+        "format-disconnected": "⚠ Disconnected"
+    },
+    "custom/checkupdates": {
+      "exec": "~/.config/checkupdates.sh",
+      "return-type": "json",
+      "interval": 36000,
+      "format": " {}",
+      "on-click": "kitty -e yay -Syyu && pkill -SIGRTMIN+8 waybar",
+      "signal": 8
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{volume}% {icon}",
+        "format-muted": " ",
+        "format-icons": {
+            "headphones": "",
+            "handsfree": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["" , "", ""]
+        },
+        "on-click": "pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $SWAYSOCK.wob ) || pamixer --get-volume > $SWAYSOCK.wob",
+        "on-click-right": "pavucontrol",
+        "on-scroll-up": "pamixer -ui 5 && pamixer --get-volume > $SWAYSOCK.wob",
+        "on-scroll-down": "pamixer -ud 5 && pamixer --get-volume > $SWAYSOCK.wob",
+        "smooth-scrolling-threshold": 0.9
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "custom/ddcutil": {
+      "format": "{percentage}% {icon}",
+      "interval": 1,
+      "format-icons": ["", "", ""],
+      "exec": "~/.config/waybar-ddcutil.py",
+      "return-type": "json"
+    },
+},
+{
+    "layer": "top",
+    "position": "right",
+    "height": 25,
+    "width": 30,
+    "modules-left": ["sway/workspaces"],
+    "modules-center": ["tray"],
+    "modules-right": ["custom/lang", "custom/vpn", "custom/ddcutil", "idle_inhibitor", "custom/dunst", "custom/checkupdates", "custom/powerbtn"],
+    "sway/workspaces": {
+        "disable-scroll": false,
+        "enable-bar-scroll": true ,
+        "disable-auto-back-and-forth": true,
+        "smooth-scrolling-threshold": 6,
+        "disable-scroll-wraparound": true,
+        "format": "{icon}",
+        "format-icons": {
+          "0": "",
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+	  "5": ""
+        }, // missed a comma right here
+        "persistent_workspaces": {
+          "1": [],
+          "2": [],
+          "3": [],
+          "4": []
+        },
+        "disable-click": false,
+    },
+    "tray": {
+        "spacing": 10,
+    },
+    "clock": {
+        "format": "{:%Y %b %d %R}"
+    },
+    "cpu": {
+        "format": " {usage}%",
+        "rotate": 45
+    },
+    "memory": {
+        "format": " {}%",
+        "rotate": 45
+    },
+    "temperature": {
+        "hwmon-path": "/sys/class/hwmon/hwmon6/temp1_input",
+        "critical-threshold": 75,
+        "format": " {temperatureC}°<small><small>C</small></small>",
+        "rotate": 45
+    },
+    "battery": {
+        "bat": "BAT0",
+        "full-at": 95,
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon}\n{capacity}%",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "network": {
+        "format-wifi": " {essid}",
+        "format-disconnected": "⚠ Disconnected"
+    },
+    "custom/powerbtn": {
+        "format": " {}",
+        "on-click": "exec ~/.config/shutdown-dmenu.sh",
+    },
+    "custom/vpn": {
+	    "format": "",
+	      "on-click": "~/.config/toggle-vpn.sh",
+	      "exec": "~/.config/toggle-vpn.sh refresh",
+	    "return-type": "json",
+      "signal": 3
+	},
+    "custom/checkupdates": {
+      "exec": "~/.config/checkupdates.sh",
+      "return-type": "json",
+      "interval": 7200,
+      "format": "{}",
+      "on-click": "kitty -e yay -Syyu && pkill -SIGRTMIN+8 waybar",
+      "signal": 8
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "",
+        "format-icons": {
+            "headphones": "",
+            "default": ["", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "custom/lang": {
+      "exec": "swaymsg -t get_inputs | grep layout_name | grep -v En | awk 'END{if(NR == 0){print \"EN\"}else{print toupper(substr($2,2,2))}}'",
+      "interval": 1,
+      "format": "{}"
+    },
+    "custom/dunst": {
+      "exec": "~/.config/toggleDunst.sh refresh",
+      "return-type": "json",
+      "interval": 1000,
+      "format": "{}",
+      "on-click": "~/.config/toggleDunst.sh",
+      "signal": 9
+    },
+    "custom/ddcutil": {
+      "format": "{icon}",
+      "interval": 1,
+      "format-icons": ["", "", ""],
+      "exec": "~/.config/waybar-ddcutil.py",
+      "on-click": "gddccontrol",
+      "on-scroll-up": "ddccontrol -l ~/.ddccontrol/profiles/20241231-004115.xml dev:/dev/i2c-0",
+      "on-scroll-down": "ddccontrol -l ~/.ddccontrol/profiles/20250206-225850.xml dev:/dev/i2c-0",
+      "return-type": "json"
+    },
+}
+]

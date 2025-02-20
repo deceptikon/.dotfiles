@@ -1,0 +1,207 @@
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "Source Code Pro";
+    font-weight: 500;
+    min-height: 0;
+}
+
+window#waybar {
+    background: rgba(0, 0, 0, 0.8);
+    color: #BBB;
+}
+
+
+#workspaces {
+  padding: 3px;
+}
+
+#workspaces button {
+    margin: 3px 0;
+    padding: 8px 2px;
+  background: rgba(255, 255, 255,0.05);
+  border: 1px solid rgba(255, 255, 255,0.05);
+  border-radius: 9px;
+    color: white;
+    font-size: 14px;
+    border-top: 1px solid transparent;
+}
+
+#workspaces button.focused {
+  color: teal;
+  background: rgba(0, 128, 128,0.2);
+  border: 1px solid teal;
+  border-radius: 9px;
+}
+
+#workspaces button.urgent {
+  color: coral;
+  background: rgba(0, 128, 128,0.2);
+  border: 1px solid coral;
+  border-radius: 11px;
+}
+
+#temperature, #backlight, #clock, #battery, #cpu, #memory, #network, #pulseaudio, #bluetooth, #mode {
+    font-size: 13px;
+    padding: 0 5px;
+    margin-right: 20px;
+    margin-top: 1px;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+#mode {
+  border-color: coral;
+  color: coral;
+}
+
+#pulseaudio.muted {
+  border-color: coral;
+}
+
+#clock {
+  border-top: 2px solid teal;
+}
+
+#window {
+  margin-top: 0px;
+  padding-top: 0px;
+  font-weight: normal;
+  color: #666;
+}
+
+#tray {
+  margin: 5px;
+  border-top: 4px double teal;
+  border-bottom: 4px double teal;
+  padding: 9px 0;
+}
+
+
+#custom-powerbtn {
+    color: orange;
+    margin: 1px;
+    margin-top: 20px;
+    padding: 0px;
+    padding-left: 10px;
+    font-size: 18px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+#idle_inhibitor, #custom-dunst, #custom-checkupdates, #custom-lang, #custom-vpn, #custom-ddcutil {
+  border: 1px solid teal;
+  border-top: 2px solid lightseagreen;
+  border-radius: 2px;
+  margin: 3px 1px;
+  padding: 0px;
+  color: lightseagreen;
+  font-size: 16px;
+  min-height: 25px;
+  min-width: 30px;
+}
+
+#custom-ddcutil {
+}
+
+#custom-vpn {
+	font-size: 16px;
+}
+#custom-vpn.on {
+  border-color: palegreen;
+  background: green;
+  color: palegreen;
+}
+#custom-lang {
+  font-size: 12px;
+  border-color: coral;
+  color: coral;
+}
+
+#idle_inhibitor {
+  font-size: 16px;
+}
+#idle_inhibitor.activated {
+  color: coral;
+  border-color: coral;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#custom-checkupdates.notify {
+  border-color: coral;
+  background: rgba(255, 255, 255, 0.1);
+  color: coral;
+  font-size: 11px;
+  padding: 0 2px
+}
+
+
+#custom-dunst.paused {
+  color: coral;
+  font-size: 12px;
+  border-color: coral;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#temperature.critical {
+    background: crimson;
+}
+
+#battery.icon {
+    color: red;
+}
+
+#battery.charging {
+  background: teal;
+  color: #FFF;
+}
+
+#battery.full {
+  font-size: 1px;
+  padding: 0;
+  margin: 0;
+}
+
+@keyframes blink {
+    to {
+        background-color: yellow;
+        color: black;
+    }
+}
+
+@keyframes blinkred {
+    to {
+        background-color: crimson;
+        color: white;
+    }
+}
+
+#battery.critical:not(.charging) {
+    color: white;
+    animation-name: blinkred;
+    animation-duration: 0.1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#battery.warning:not(.charging) {
+    color: white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#network.disconnected {
+    border-color: coral;
+    color: coral;
+    background: transparent;
+}
+
+#network {
+  color: palegreen;
+}
+#network.wifi {
+  color: gray;
+}
