@@ -2,8 +2,8 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 25,
-    "modules-left": ["battery", "network", "custom/vpn", "bluetooth", "temperature", "cpu", "memory"],
+    "height": 28,
+    "modules-left": ["battery", "network", "custom/vpn", "custom/fan", "temperature", "cpu", "memory"],
     "modules-center": ["sway/window", "custom/waybar-media"],
     "modules-right": ["sway/mode", "pulseaudio", "backlight", "clock"],
     "sway/mode": {
@@ -15,8 +15,10 @@
         "format": "{}",
         "max-length": 80,
         "rewrite": {
-           "(.*) - Firefox Developer Edition": "🌎 $1",
+           "(.*) Mozilla Firefox": "$1 🌎",
+           "(.*) VSCodium": "$1  ",
            "(.*) - vim": " $1",
+           "vim (.*)": " $1",
            "(.*) - zsh": " [$1]",
            "^zsh$": ""
         }
@@ -30,7 +32,7 @@
         "escape": true
     },
     "tray": {
-      "icon-size": 12,
+      "icon-size": 16,
       "spacing": 5,
     },
     "clock": {
@@ -49,8 +51,12 @@
         "format": " {}%"
     },
     "temperature": {
-        "critical-threshold": 75,
-        "format": " {temperatureC}°C"
+	"hwmon-path": ["/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp2_input",
+"/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp3_input",
+"/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp4_input",
+"/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp5_input"],
+        "format": " {temperatureC}°<small><small>C</small></small>",
+        "critical-threshold": 75
     },
     "backlight": {
         "device": "intel_backlight",
@@ -110,6 +116,7 @@
         },
         "on-click": "pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $SWAYSOCK.wob ) || pamixer --get-volume > $SWAYSOCK.wob",
         "on-click-right": "pavucontrol",
+        "on-click-middle": "pulseaudio-equalizer-gtk",
         "on-scroll-up": "pamixer -ui 5 && pamixer --get-volume > $SWAYSOCK.wob",
         "on-scroll-down": "pamixer -ud 5 && pamixer --get-volume > $SWAYSOCK.wob",
         "smooth-scrolling-threshold": 0.9
@@ -117,8 +124,8 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
+            "activated": " ",
+            "deactivated": " "
         }
     },
     "custom/ddcutil": {
@@ -128,12 +135,17 @@
       "exec": "~/.config/waybar-ddcutil.py",
       "return-type": "json"
     },
+    "custom/fan": {
+        "exec": "sensors | awk '/fan2:/ {print $2,$3}'",
+        "format": "{} ",
+        "interval": 5,
+    },
 },
 {
     "layer": "top",
     "position": "right",
-    "height": 25,
-    "width": 30,
+    "height": 55,
+    "width": 56,
     "modules-left": ["sway/workspaces"],
     "modules-center": ["tray"],
     "modules-right": ["custom/lang", "custom/vpn", "custom/ddcutil", "idle_inhibitor", "custom/dunst", "custom/checkupdates", "custom/powerbtn"],
@@ -156,12 +168,14 @@
           "1": [],
           "2": [],
           "3": [],
-          "4": []
+          "4": [],
+          "5": []
         },
         "disable-click": false,
     },
     "tray": {
-        "spacing": 10,
+        "spacing": 14,
+        "icon-size": 20,
     },
     "clock": {
         "format": "{:%Y %b %d %R}"
@@ -175,7 +189,10 @@
         "rotate": 45
     },
     "temperature": {
-        "hwmon-path": "/sys/class/hwmon/hwmon6/temp1_input",
+	"hwmon-path": ["/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp2_input",
+"/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp3_input",
+"/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp4_input",
+"/sys/devices/platform/coretemp.0/hwmon/hwmon2/temp5_input"],
         "critical-threshold": 75,
         "format": " {temperatureC}°<small><small>C</small></small>",
         "rotate": 45
@@ -200,16 +217,17 @@
         "on-click": "exec ~/.config/shutdown-dmenu.sh",
     },
     "custom/vpn": {
-	    "format": "",
-	      "on-click": "~/.config/toggle-vpn.sh",
-	      "exec": "~/.config/toggle-vpn.sh refresh",
-	    "return-type": "json",
-      "signal": 3
-	},
+	"format": "",
+	"on-click": "~/.config/toggle-vpn.sh",
+	"exec": "~/.config/toggle-vpn.sh refresh",
+	"return-type": "json",
+	"interval": "once",
+	"signal": 3
+    },
     "custom/checkupdates": {
       "exec": "~/.config/checkupdates.sh",
       "return-type": "json",
-      "interval": 7200,
+      "interval": 14400,
       "format": "{}",
       "on-click": "kitty -e yay -Syyu && pkill -SIGRTMIN+8 waybar",
       "signal": 8
@@ -226,8 +244,8 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
+            "activated": " ",
+            "deactivated": " "
         }
     },
     "custom/lang": {

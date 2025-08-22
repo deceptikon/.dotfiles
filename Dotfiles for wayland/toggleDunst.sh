@@ -9,7 +9,7 @@ status=`dunstctl is-paused`
 
 if [ "$status" = "false" ]; then
   tooltip=`dunstctl count | tr '\n' ' '`
-  echo '{"text":"","tooltip":"Notifications: '$tooltip'","class":"on"}' | jq --compact-output
+  echo '{"text":"   ","tooltip":"Notifications: '$tooltip'","class":"on"}' | jq --compact-output
 else
   unread=`dunstctl count waiting`
   echo '{"text":"<small> '$unread'</small>","tooltip":"Notifications paused, '$unread' new","class":"paused"}' | jq --compact-output

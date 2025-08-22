@@ -4,6 +4,7 @@
     font-family: "Source Code Pro";
     font-weight: 500;
     min-height: 0;
+    padding: 1px;
 }
 
 window#waybar {
@@ -17,8 +18,8 @@ window#waybar {
 }
 
 #workspaces button {
-    margin: 3px 0;
-    padding: 8px 2px;
+    margin: 2px 0;
+    padding: 4px 2px;
   background: rgba(255, 255, 255,0.05);
   border: 1px solid rgba(255, 255, 255,0.05);
   border-radius: 9px;
@@ -41,7 +42,7 @@ window#waybar {
   border-radius: 11px;
 }
 
-#temperature, #backlight, #clock, #battery, #cpu, #memory, #network, #pulseaudio, #bluetooth, #mode {
+#temperature, #backlight, #clock, #battery, #cpu, #memory, #network, #pulseaudio, #bluetooth, #mode, #custom-fan {
     font-size: 13px;
     padding: 0 5px;
     margin-right: 20px;
@@ -91,13 +92,13 @@ window#waybar {
 #idle_inhibitor, #custom-dunst, #custom-checkupdates, #custom-lang, #custom-vpn, #custom-ddcutil {
   border: 1px solid teal;
   border-top: 2px solid lightseagreen;
-  border-radius: 2px;
   margin: 3px 1px;
-  padding: 0px;
+  padding: 0px 2px;
   color: lightseagreen;
   font-size: 16px;
   min-height: 25px;
-  min-width: 30px;
+  min-width: 32px;
+  border-radius: 4px;
 }
 
 #custom-ddcutil {
@@ -131,7 +132,7 @@ window#waybar {
   background: rgba(255, 255, 255, 0.1);
   color: coral;
   font-size: 11px;
-  padding: 0 2px
+  padding: 0 2px;
 }
 
 

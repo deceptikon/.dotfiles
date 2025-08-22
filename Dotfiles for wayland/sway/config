@@ -11,18 +11,26 @@ set $right l
 set $term kitty
 # layout insensitive binding
 set $mybind bindsym --to-code
-set $swayr env RUST_BACKTRACE=1 /home/lexx/swayr/target/debug/swayr
+set $swayr env RUST_BACKTRACE=1 swayr
 exec env RUST_BACKTRACE=1 swayrd > /tmp/swayrd.log 2>&1
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu wofi --show=drun --lines=8 --prompt="" -i
+set $setlang swaymsg input type:keyboard xkb_switch_layout 0
+set $menu $setlang && wofi --show=drun --lines=8 --prompt="" -i
 
 
 font pango:TerminessTTF Nerd Font Mono 14px
 
+set $opacity1 0.9
+set $opacity2 0.8
+set $opacity3 0.7
+#for_window [class=".*"] opacity $opacity1
+#for_window [app_id=".*"] opacity $opacity1
+for_window [app_id="codium"] opacity $opacity2
+for_window [app_id="kitty"] opacity $opacity2
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
@@ -184,33 +192,37 @@ input type:keyboard {
     # assign [class="Pcmanfm"] $ws3
     # assign [class="Skype"] $ws5
 
+#
+# Borders
+#
+
+	# A 10-pixel border around every window.
+	gaps inner 8
+
+	# Removes the title bar of each window.
+	default_border pixel 1
+	default_floating_border normal
+
+	# Hide borders
+	hide_edge_borders none
+
+	# change borders
+	$mybind $mod+u border none
+	$mybind $mod+y border pixel 1
+	$mybind $mod+n border normal
+
+
+
     # Open specific applications in floating mode
-    for_window [title="alsamixer"] floating enable border pixel 1
-    for_window [app_id="thunar" title="File operation progress"] floating enable border normal
-    for_window [app_id="nm-connection-editor"] floating enable border normal
-    for_window [app_id="pavucontrol"] floating enable border normal
-    for_window [class="Clipgrab"] floating enable
-    for_window [title="File Transfer*"] floating enable
-    for_window [app_id="zenity"] floating enable
-    for_window [class="Galculator"] floating enable border pixel 1
-    for_window [class="GParted"] floating enable border normal
-    for_window [title="i3_help"] floating enable sticky enable border normal
-    for_window [class="Lightdm-settings"] floating enable
-    for_window [class="Lxappearance"] floating enable sticky enable border normal
-    for_window [title="MuseScore: Play Panel"] floating enable
-    for_window [class="Nitrogen"] floating enable sticky enable border normal
-    for_window [class="Oblogout"] fullscreen enable
-    for_window [class="octopi"] floating enable
-    for_window [title="About Pale Moon"] floating enable
-    for_window [app_id="pamac-manager"] floating enable
-    for_window [class="qt5ct"] floating enable sticky enable border normal
-    for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
-    for_window [class="Simple-scan"] floating enable border normal
-    for_window [class="(?i)System-config-printer.py"] floating enable border normal
+    for_window [app_id="nm-connection-editor"] floating enable, border normal 1
+    for_window [app_id="pavucontrol"] floating enable, border normal 1
+    for_window [app_id="galculator"] floating enable, border normal 1
+    for_window [class="qt5ct"] floating enable, sticky enable, border normal
     for_window [class="Skype"] floating enable border normal
-    for_window [class="Timeset-gui"] floating enable border normal
-    for_window [class="(?i)virtualbox"] floating enable border normal
-    for_window [class="Xfburn"] floating enable
+    for_window [class="(?i)virtualbox"] floating enable border normal 
+    for_window [app_id="yandex-music-player"] border normal 2, floating enable
+    for_window [app_id="pulseaudio-equalizer-gtk"] border normal 2, floating enable
+    for_window [class="PacketTracer"] floating enable
     for_window [window_role="pop-up"] floating enable
     # for_window [app_id=""] floating enable, sticky enable, border none
     for_window [app_id="firefox" title="Picture in picture"] floating enable, sticky enable, border none
@@ -221,12 +233,12 @@ input type:keyboard {
 
 
     # telegram related settings
-    $mybind $mod+grave [app_id="telegramdesktop"] scratchpad show
+    $mybind $mod+grave [app_id="org.telegram.desktop"] scratchpad show
 
-    for_window [app_id="telegramdesktop"] floating enable
-    for_window [app_id="telegramdesktop" title="Telegram"] move scratchpad
-    assign [app_id="Google-chrome"] -> $ws1
-    assign [app_id="Code"] $ws2
+    for_window [app_id="org.telegram.desktop"] floating enable
+    for_window [app_id="org.telegram.desktop" title="Telegram"] move scratchpad
+    assign [app_id="firefox"] -> $ws1
+    assign [app_id="codium"] $ws2
     assign [class="GitAhead"] $ws3
     assign [class="Slack"] $ws4
 
@@ -293,7 +305,7 @@ $mybind XF86AudioMute exec pamixer --toggle-mute && ( pamixer --get-mute && echo
 #
 #
 $mybind $mod+F9 exec ddccontrol -r 0xd6 -w 4 dev:/dev/i2c-0 -v
-$mybind $mod+F10 exec ddccontrol -r 0xd6 -w 1 dev:/dev/i2c-0 -v 
+$mybind $mod+F10 exec ddccontrol -r 0xd6 -w 1 dev:/dev/i2c-0 -v
 
 #exec touch /tmp/brightness
 #exec ddcutil --bus 5 setvcp 10 100 | echo '100' > $SWAYSOCK.wob | echo '100' > /tmp/brightness
@@ -339,8 +351,8 @@ mode "resize" {
     $mybind Escape mode "default"
 }
 $mybind $mod+r mode "resize"
-$mybind $mod+Tab exec $swayr next-window >> /tmp/swayr.log 2>&1
-$mybind $mod+Shift+Tab exec $swayr prev-window >> /tmp/swayr.log 2>&1
+$mybind $mod+Tab exec $swayr next-window all-workspaces >> /tmp/swayr.log 2>&1
+$mybind $mod+Shift+Tab exec $swayr prev-window all-workspaces >> /tmp/swayr.log 2>&1
 
 #
 # mode for swaynagmode - swaynag wrapper to accept keyboard commands
@@ -386,25 +398,6 @@ $mybind Ctrl+Shift+Space exec dunstctl close-all
 $mybind Ctrl+grave exec dunstctl history-pop
 
 #
-# Borders
-#
-
-# A 10-pixel border around every window.
-gaps inner 4
-
-# Removes the title bar of each window.
-default_border pixel 1
-default_floating_border normal
-
-# Hide borders
-hide_edge_borders none
-
-# change borders
-$mybind $mod+u border none
-$mybind $mod+y border pixel 1
-$mybind $mod+n border normal
-
-#
 # name me
 #
 $mybind Ctrl+$mod+grave exec ~/.config/toggleDunst.sh && pkill -SIGRTMIN+9 waybar
@@ -412,10 +405,12 @@ $mybind Ctrl+$mod+grave exec ~/.config/toggleDunst.sh && pkill -SIGRTMIN+9 wayba
 #
 # Start apps
 #
-$mybind $mod+F1 exec chromium
-$mybind $mod+Shift+F1 exec google-chrome-unstable
-$mybind $mod+F2 exec code --enable-features=UseOzonePlatform --ozone-platform=wayland
+$mybind $mod+F1 exec firefox
+$mybind $mod+Shift+F1 exec google-chrome
+$mybind $mod+F2 exec codium --enable-features=UseOzonePlatform --ozone-platform=wayland
 $mybind $mod+F3 exec nemo
+$mybind $mod+F4 exec whatsie
+$mybind $mod+F5 exec Telegram
 $mybind $mod+Shift+s exec slurp | grim -g - - | wl-copy # screenshot selected area and put to clipboard
 
 
@@ -440,7 +435,7 @@ $mybind $mod+Shift+s exec slurp | grim -g - - | wl-copy # screenshot selected ar
 #         --effect-greyscale \
 #         --grace 10 \
 #         --fade-in 0.2'
-set $locker 'swaylock \
+set $locker 'swaylock -f \
         --screenshots \
         --clock \
         --timestr %H:%M \
@@ -448,24 +443,21 @@ set $locker 'swaylock \
         --indicator-idle-visible \
         --indicator-radius 200 \
         --indicator-thickness 8 \
-        --effect-pixelate 4 \
+        --effect-pixelate 3 \
         --effect-greyscale \
         --grace 10 \
         --fade-in 0.2'
 
-set $idlelock 'swayidle -w timeout 300 "$locker" timeout 500 "swaymsg \'output * dpms off\'" resume "swaymsg \'output * dpms on\'" before-sleep "$locker"'
-
-set $idle 'swayidle -w timeout 0 \'swaymsg "output * dpms off"\' resume \'swaymsg "output * dpms on"\''
-# set $idle 'swayidle -w timeout 0 \'swaymsg "output * dpms off"\' resume \'swaymsg "output * dpms on"\' before-sleep $locker'
-# exec $idlelock
-$mybind $mod+Escape exec $idle
+set $idlelock $setlang && swayidle -w timeout 300 $locker timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' before-sleep $locker
+$mybind $mod+Escape exec $idlelock
 $mybind $mod+q exec $locker
 
 # $mybind $mod+q exec $idle-and-lock
 
 
 
-exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob |wob -W 400 -H 20 -b 1 -a right -a top -M 20 -p 0 --bar-color '#008080ff'
+exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob
+# exec mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob |wob -W 400 -H 20 -b 1 -a right -a top -M 20 -p 0 --bar-color '#008080ff'
 exec --no-startup-id /home/lexx/.local/bin/sway-xkb-switcher
 exec --no-startup-id /home/lexx/.config/inactive-transparency.py
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
@@ -475,9 +467,9 @@ exec --no-startup-id dunst &
 exec --no-startup-id ydotoold &
 exec --no-startup-id libinput-gestures &
 exec --no-startup-id poweralertd &
-exec --no-startup-id autotiling &
-# exec --no-startup-id $idlelock
+exec --no-startup-id sleep 4 && autotiling &
+exec --no-startup-id $idlelock
+exec --no-startup-id gammastep-indicator
 # exec --no-startup-id blueman-applet &
-# exec gammastep &
 
 include /etc/sway/config.d/*
